@@ -91,6 +91,7 @@ export default function Settings({ settings, onChange }) {
               : '—×—'}
           </span>
         </div>
+        <span className="nav-credit">by <a href="https://www.rblez.com" target="_blank" rel="noopener noreferrer">rblez</a></span>
       </div>
 
       {modalOpen && (

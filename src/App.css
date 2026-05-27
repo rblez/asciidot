@@ -506,7 +506,8 @@
   letter-spacing: 0.02em;
 }
 
-.mobile-text {
+.mobile-text,
+.nav-credit {
   display: none;
 }
 
@@ -526,34 +527,53 @@
   /* Split panels → stack */
   .preview-area {
     flex-direction: column;
+    padding-bottom: 108px;
   }
   .box {
     width: 100%;
-    height: 50vh;
-    flex: none;
+    flex: 1;
+    overflow: hidden;
   }
   .box:first-child {
     border-right: none;
     border-bottom: 1px solid #1f1f1f;
   }
 
-  /* Controls strip */
+  /* ── Settings as fixed floating nav footer ── */
   .settings {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
     height: auto;
     min-height: auto;
-    padding: 8px 16px;
+    padding: 6px 16px;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 2px;
+    border-top: 1px solid #1f1f1f;
+    background: rgba(10, 10, 10, 0.92);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    justify-content: space-between;
+    align-items: center;
   }
   .setting-group + .setting-group::before {
     display: none;
   }
 
-  .setting-group {
-    width: 100%;
-    height: 36px;
+  /* Precision & Scale: side by side on one row */
+  .setting-group:nth-of-type(1),
+  .setting-group:nth-of-type(2) {
+    width: calc(50% - 4px);
+    height: 28px;
   }
-  .setting-group input[type="range"] {
+  .setting-group:nth-of-type(1) label,
+  .setting-group:nth-of-type(2) label {
+    display: none;
+  }
+  .setting-group:nth-of-type(1) input,
+  .setting-group:nth-of-type(2) input {
     width: 100%;
   }
   .setting-group input[type="range"]::-webkit-slider-thumb {
@@ -566,18 +586,37 @@
   }
   .setting-value {
     min-width: 30px;
+    font-size: 0.55rem;
   }
 
-  /* INVERT toggle — one row */
+  /* INVERT toggle — inline row */
   .toggle-group {
     width: auto;
-    height: 44px;
+    height: 32px;
+    gap: 6px;
+  }
+  .toggle-group label {
+    font-size: 0.6rem;
+  }
+  .toggle {
+    width: 26px;
+    height: 12px;
+  }
+  .toggle-slider::before {
+    width: 6px;
+    height: 6px;
+    left: 2px;
+    bottom: 2px;
+  }
+  .toggle input:checked + .toggle-slider::before {
+    transform: translateX(12px);
   }
 
-  /* Styles button — full width tap target */
+  /* Styles trigger — inline button */
   .style-trigger {
-    width: 100%;
-    min-height: 36px;
+    width: auto;
+    min-height: 28px;
+    font-size: 0.6rem;
   }
 
   /* Dimensions hidden */
@@ -585,12 +624,30 @@
     display: none;
   }
 
-  /* Copy buttons */
-  .copy-btn {
-    padding: 6px 12px;
+  /* Credit line in nav footer */
+  .nav-credit {
+    display: inline;
+    font-size: 0.55rem;
+    color: #333;
+    font-family: 'Geist Pixel', monospace;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .nav-credit a {
+    color: #444;
+    text-decoration: none;
   }
 
-  /* Modal fullscreen */
+  /* ── Output toolbar ── */
+  .copy-btn {
+    padding: 6px 10px;
+    font-size: 0.6rem;
+  }
+  .output-dims {
+    display: none;
+  }
+
+  /* ── Modal fullscreen ── */
   .modal-box {
     width: 100vw;
     height: 100vh;
@@ -600,7 +657,7 @@
     justify-content: center;
   }
 
-  /* Uploader — show mobile text, hide desktop */
+  /* ── Uploader — show mobile text, hide desktop ── */
   .upload-placeholder .desktop-text {
     display: none;
   }
