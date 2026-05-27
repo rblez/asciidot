@@ -7,7 +7,7 @@ const STYLES = [
   { key: 'nodithering', label: 'No Dithering', desc: 'nearest neighbor' },
 ];
 
-export default function Settings({ settings, onChange }) {
+export default function Settings({ settings, onChange, onAutoThreshold }) {
   const [modalOpen, setModalOpen] = useState(false);
   const modalRef = useRef(null);
 
@@ -49,6 +49,7 @@ export default function Settings({ settings, onChange }) {
             onChange={(e) => handleChange('precision', parseFloat(e.target.value))}
           />
           <span className="setting-value">{pxVal}px</span>
+          <button className="auto-btn" onClick={onAutoThreshold} title="auto threshold (Otsu)">auto</button>
         </div>
 
         <div className="setting-group">
@@ -78,6 +79,33 @@ export default function Settings({ settings, onChange }) {
           </label>
         </div>
 
+        <div className="setting-group toggle-group">
+          <label htmlFor="crop">Crop</label>
+          <label className="toggle">
+            <input
+              id="crop"
+              type="checkbox"
+              checked={settings.crop}
+              onChange={(e) => handleChange('crop', e.target.checked)}
+            />
+            <span className="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div className="setting-group">
+          <label htmlFor="fontSize">Size</label>
+          <input
+            id="fontSize"
+            type="range"
+            min="8"
+            max="24"
+            step="1"
+            value={settings.fontSize}
+            onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
+          />
+          <span className="setting-value">{settings.fontSize}px</span>
+        </div>
+
         <div className="setting-group">
           <button className="style-trigger" onClick={() => setModalOpen(true)}>
             styles · {currentLabel}
@@ -91,7 +119,6 @@ export default function Settings({ settings, onChange }) {
               : '—×—'}
           </span>
         </div>
-        <span className="nav-credit">by <a href="https://www.rblez.com" target="_blank" rel="noopener noreferrer">rblez</a></span>
       </div>
 
       {modalOpen && (
