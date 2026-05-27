@@ -108,6 +108,20 @@ function App() {
     setDimensions(entry.dimensions)
   }, [])
 
+  const handleSavePng = useCallback(() => {
+    const canvas = document.querySelector('.ascii-canvas')
+    if (!canvas) return
+    canvas.toBlob((blob) => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'asciidot-output.png'
+      a.click()
+      URL.revokeObjectURL(url)
+    }, 'image/png')
+  }, [])
+
   const handleCopy = useCallback((mode) => {
     if (!ascii) return
     const text = mode === 'sans'
@@ -206,6 +220,8 @@ function App() {
         settings={{ ...settings, dimensions }}
         onChange={handleSettingsChange}
         onAutoThreshold={handleAutoThreshold}
+        onCopy={handleCopy}
+        onSavePng={handleSavePng}
       />
     </div>
   )
