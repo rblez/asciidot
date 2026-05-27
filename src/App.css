@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #0a0a0a;
+  background: #1a1a1a;
 }
 
 /* ── Header ── */
@@ -51,7 +51,7 @@
 }
 
 .box:first-child {
-  border-right: 1px solid #1f1f1f;
+  border-right: 1px solid #2a2a2a;
 }
 
 .box-label {
@@ -133,7 +133,7 @@
   justify-content: center;
   position: relative;
   overflow-y: auto;
-  background: #0a0a0a;
+  background: #1a1a1a;
 }
 
 .ascii-preview.empty {
@@ -220,7 +220,7 @@
   gap: 0;
   padding: 0 24px;
   border-top: 1px solid #1a1a1a;
-  background: #0a0a0a;
+  background: #1a1a1a;
 }
 
 .setting-group {
@@ -338,7 +338,7 @@
 
 .toggle input:checked + .toggle-slider::before {
   transform: translateX(14px);
-  background: #0a0a0a;
+  background: #1a1a1a;
 }
 
 /* ── Style trigger ── */
@@ -474,7 +474,7 @@
 .export-pill.active {
   background: #e000e0;
   border-color: #e000e0;
-  color: #0a0a0a;
+  color: #1a1a1a;
 }
 
 .export-btn {
@@ -536,7 +536,7 @@
   }
   .box:first-child {
     border-right: none;
-    border-bottom: 1px solid #1f1f1f;
+    border-bottom: 1px solid #2a2a2a;
   }
 
   /* ── Settings as fixed floating nav footer ── */
@@ -551,7 +551,7 @@
     padding: 6px 16px;
     flex-wrap: wrap;
     gap: 2px;
-    border-top: 1px solid #1f1f1f;
+    border-top: 1px solid #2a2a2a;
     background: rgba(10, 10, 10, 0.92);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);

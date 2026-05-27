@@ -15,7 +15,7 @@ export default function AsciiPreview({ ascii, dimensions }) {
     canvas.height = dispH;
     const ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = '#0a0a0a';
+    ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = '#ffffff';
