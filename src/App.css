@@ -1,259 +1,309 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --bg: #0d0d0d;
-  --surface: #1a1a1a;
-  --border: #2a2a2a;
-  --text: #a0a0a0;
-  --text-bright: #e0e0e0;
-  --accent: #7c3aed;
-  --accent-hover: #8b5cf6;
-  --radius: 8px;
-  --font: 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
-}
-
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-#root {
-  max-width: 100%;
-  margin: 0 auto;
-  border: none;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
+/* ── Layout ── */
 .app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  height: 100vh;
+  background: #0a0a0a;
 }
 
+/* ── Header ── */
 .app-header {
+  height: 48px;
+  min-height: 48px;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+  padding-left: 24px;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .app-header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-bright);
+  font-family: 'Geist Pixel', monospace;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: -1px;
+  line-height: 1;
   margin: 0;
-  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  font-size: 14px;
-  color: var(--text);
-  opacity: 0.6;
+  font-size: 0.75rem;
+  color: #444;
+  line-height: 1;
+  margin-top: 4px;
 }
 
+/* ── Split panels ── */
 .preview-area {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  min-height: 400px;
+  flex: 1;
+  display: flex;
+  min-height: 0;
 }
 
 .box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  flex: 1;
+  width: 50%;
   display: flex;
   flex-direction: column;
+  position: relative;
   overflow: hidden;
 }
 
-.box-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 8px 12px;
-  background: var(--border);
-  color: var(--text);
-  opacity: 0.6;
+.box:first-child {
+  border-right: 1px solid #1f1f1f;
 }
 
-/* Uploader */
+.box-label {
+  display: none;
+}
+
+/* ── Uploader (INPUT panel) ── */
 .uploader {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  min-height: 300px;
   position: relative;
   overflow: hidden;
 }
 
-.uploader:hover {
-  background: rgba(124, 58, 237, 0.05);
+.uploader.dragging {
+  outline: 1px solid #e000e0;
+  outline-offset: -1px;
 }
 
 .upload-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  color: var(--text);
-  opacity: 0.4;
+  gap: 4px;
+  color: #2a2a2a;
   user-select: none;
-}
-
-.upload-icon {
-  font-size: 32px;
-  font-weight: 300;
+  text-align: center;
 }
 
 .upload-placeholder p {
-  font-size: 13px;
+  font-size: 0.7rem;
+  line-height: 1.4;
 }
 
 .preview {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  display: block;
 }
 
-/* ASCII Output */
+.file-name {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  font-size: 10px;
+  color: #333;
+  font-family: 'Geist Pixel', monospace;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.upload-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #333;
+  font-size: 11px;
+  font-family: 'Geist Pixel', monospace;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1.3;
+}
+
+/* ── ASCII Output (OUTPUT panel) ── */
 .ascii-preview {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto;
-  padding: 16px;
+  position: relative;
+  overflow-y: auto;
+  background: #0a0a0a;
 }
 
 .ascii-preview.empty {
-  color: var(--text);
-  opacity: 0.3;
-  font-size: 13px;
+  color: #2a2a2a;
 }
 
-.placeholder-text {
+.ascii-preview.empty .placeholder-text {
+  font-size: 0.7rem;
   user-select: none;
 }
 
-.ascii-output {
-  font-family: var(--font);
-  font-size: 8px;
-  line-height: 1.1;
-  color: var(--text-bright);
-  white-space: pre;
-  margin: 0;
-  letter-spacing: 0;
+.ascii-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  image-rendering: pixelated;
+  display: block;
 }
 
-/* Settings */
-.settings {
+/* Scanline overlay */
+.ascii-preview.has-output::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.04) 1px,
+    rgba(0, 0, 0, 0.04) 3px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Output toolbar (COPY + dimensions) ── */
+.output-toolbar {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
-  gap: 24px;
-  padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  z-index: 2;
+}
+
+.copy-btn {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 0.65rem;
+  color: #555;
+  background: none;
+  border: 1px solid #333;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  line-height: 1.4;
+}
+
+.copy-btn:hover {
+  border-color: #e000e0;
+  color: #e000e0;
+}
+
+.copy-btn.copied {
+  border-color: #e000e0;
+  color: #e000e0;
+}
+
+.output-dims {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 0.65rem;
+  color: #444;
+  line-height: 1;
+}
+
+/* ── Controls strip ── */
+.settings {
+  height: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  border-top: 1px solid #1a1a1a;
+  background: #0a0a0a;
 }
 
 .setting-group {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 140px;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.setting-group + .setting-group::before {
+  content: '·';
+  color: #333;
+  margin: 0 16px;
+  font-size: 0.85rem;
 }
 
 .setting-group label {
-  font-size: 11px;
+  font-size: 0.65rem;
+  color: #555;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text);
-  opacity: 0.6;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
-.setting-group select,
-.setting-group input[type="range"] {
-  font-family: var(--font);
-  font-size: 13px;
-  background: var(--bg);
-  color: var(--text-bright);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 6px 8px;
-  outline: none;
-  cursor: pointer;
-}
-
-.setting-group select:hover,
-.setting-group select:focus-visible {
-  border-color: var(--accent);
-}
-
+/* Custom range slider */
 .setting-group input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 4px;
-  background: var(--border);
+  width: 80px;
+  height: 1px;
+  background: #222;
   border: none;
-  border-radius: 2px;
-  padding: 0;
+  outline: none;
   cursor: pointer;
+  margin: 0;
 }
 
 .setting-group input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: 8px;
+  height: 8px;
+  border-radius: 0;
+  background: #e000e0;
   cursor: pointer;
-  border: 2px solid var(--bg);
+  border: none;
 }
 
 .setting-group input[type="range"]::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: 8px;
+  height: 8px;
+  border-radius: 0;
+  background: #e000e0;
   cursor: pointer;
-  border: 2px solid var(--bg);
+  border: none;
 }
 
 .setting-group input[type="range"]:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 1px solid #e000e0;
   outline-offset: 2px;
 }
 
+/* Value readout next to slider */
+.setting-value {
+  font-size: 0.6rem;
+  color: #666;
+  min-width: 36px;
+  font-family: 'Geist Pixel', monospace;
+}
+
+/* Invert toggle */
 .toggle-group {
-  flex-direction: row;
+  display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .toggle {
   position: relative;
-  width: 40px;
-  height: 22px;
+  width: 28px;
+  height: 14px;
   display: inline-block;
+  cursor: pointer;
 }
 
 .toggle input {
@@ -265,51 +315,306 @@ body {
 .toggle-slider {
   position: absolute;
   inset: 0;
-  background: var(--border);
-  border-radius: 11px;
-  cursor: pointer;
-  transition: background 0.2s;
+  background: #222;
+  border: 1px solid #333;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .toggle-slider::before {
   content: '';
   position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 3px;
-  bottom: 3px;
-  background: var(--text-bright);
-  border-radius: 50%;
-  transition: transform 0.2s;
+  width: 8px;
+  height: 8px;
+  left: 2px;
+  bottom: 2px;
+  background: #555;
+  transition: transform 0.15s, background 0.15s;
 }
 
 .toggle input:checked + .toggle-slider {
-  background: var(--accent);
+  background: #e000e0;
+  border-color: #e000e0;
 }
 
 .toggle input:checked + .toggle-slider::before {
-  transform: translateX(18px);
+  transform: translateX(14px);
+  background: #0a0a0a;
 }
 
-.info .dimensions-label {
+/* ── Style trigger ── */
+.style-trigger {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 0.65rem;
+  color: #444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.style-trigger:hover {
+  color: #fff;
+}
+
+/* ── Modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-box {
+  width: 320px;
+  background: #111;
+  border: 1px solid #222;
+  padding: 24px;
+}
+
+.modal-title {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 11px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.modal-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  border-bottom: 1px solid #1a1a1a;
+  cursor: pointer;
+  padding-left: 14px;
+  position: relative;
+  transition: background 0.15s;
+}
+
+.modal-option:hover {
+  background: #1a1a1a;
+}
+
+.modal-option.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #e000e0;
+}
+
+.modal-option-name {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 14px;
+  color: #fff;
+}
+
+.modal-option.selected .modal-option-name {
+  color: #e000e0;
+}
+
+.modal-option-desc {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 11px;
+  color: #444;
+}
+
+/* ── Export modal ── */
+.modal-section-label {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+.modal-section-label:first-of-type {
+  margin-top: 0;
+}
+
+.export-pills {
+  display: flex;
+  gap: 0;
+}
+
+.export-pill {
+  flex: 1;
+  font-family: 'Geist Pixel', monospace;
   font-size: 13px;
-  color: var(--text);
-  opacity: 0.5;
-  font-family: var(--font);
-  text-transform: none;
-  letter-spacing: normal;
+  color: #555;
+  background: none;
+  border: 1px solid #222;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-align: center;
+  line-height: 1;
 }
 
+.export-pill + .export-pill {
+  border-left: none;
+}
+
+.export-pill:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.export-pill.active {
+  background: #e000e0;
+  border-color: #e000e0;
+  color: #0a0a0a;
+}
+
+.export-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  font-family: 'Geist Pixel', monospace;
+  font-size: 13px;
+  color: #fff;
+  background: none;
+  border: 1px solid #444;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  text-align: center;
+  line-height: 1;
+}
+
+.export-btn:hover {
+  border-color: #e000e0;
+  color: #e000e0;
+}
+
+/* Dimensions readout in controls */
+.dimensions-label {
+  font-size: 0.65rem;
+  color: #444;
+  font-family: 'Geist Pixel', monospace;
+  letter-spacing: 0.02em;
+}
+
+.mobile-text {
+  display: none;
+}
+
+/* ── Mobile (max-width 768px) ── */
 @media (max-width: 768px) {
+  /* Header */
+  .app-header {
+    padding-left: 16px;
+  }
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+  .subtitle {
+    display: none;
+  }
+
+  /* Split panels → stack */
   .preview-area {
-    grid-template-columns: 1fr;
-  }
-
-  .app {
-    padding: 16px;
-  }
-
-  .settings {
     flex-direction: column;
+  }
+  .box {
+    width: 100%;
+    height: 50vh;
+    flex: none;
+  }
+  .box:first-child {
+    border-right: none;
+    border-bottom: 1px solid #1f1f1f;
+  }
+
+  /* Controls strip */
+  .settings {
+    height: auto;
+    min-height: auto;
+    padding: 8px 16px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .setting-group + .setting-group::before {
+    display: none;
+  }
+
+  .setting-group {
+    width: 100%;
+    height: 36px;
+  }
+  .setting-group input[type="range"] {
+    width: 100%;
+  }
+  .setting-group input[type="range"]::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  .setting-group input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  .setting-value {
+    min-width: 30px;
+  }
+
+  /* INVERT toggle — one row */
+  .toggle-group {
+    width: auto;
+    height: 44px;
+  }
+
+  /* Styles button — full width tap target */
+  .style-trigger {
+    width: 100%;
+    min-height: 36px;
+  }
+
+  /* Dimensions hidden */
+  .dimensions-label {
+    display: none;
+  }
+
+  /* Copy buttons */
+  .copy-btn {
+    padding: 6px 12px;
+  }
+
+  /* Modal fullscreen */
+  .modal-box {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Uploader — show mobile text, hide desktop */
+  .upload-placeholder .desktop-text {
+    display: none;
+  }
+  .upload-placeholder .mobile-text {
+    display: block;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: #2a2a2a;
+    user-select: none;
+    text-align: center;
+  }
+
+  .upload-hint {
+    white-space: normal;
+    padding: 0 16px;
   }
 }

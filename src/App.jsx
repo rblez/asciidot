@@ -1,12 +1,12 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import ImageUploader from './components/ImageUploader'
 import AsciiPreview from './components/AsciiPreview'
 import Settings from './components/Settings'
-import { imageToAscii, estimateBrailleDimensions } from './utils/imageToAscii'
+import { imageToAscii, calculateBrailleGrid } from './utils/imageToAscii'
 import './App.css'
 
 const DEFAULT_SETTINGS = {
-  charSet: 'braille',
+  style: 'nodithering',
   precision: 0.5,
   scale: 0.5,
   invert: false,
@@ -17,7 +17,6 @@ function App() {
   const [image, setImage] = useState(null)
   const [ascii, setAscii] = useState('')
   const [dimensions, setDimensions] = useState(null)
-  const workerRef = useRef(null)
 
   const handleImageLoad = useCallback((img) => {
     setImage(img)
@@ -29,13 +28,15 @@ function App() {
       setDimensions(null)
       return
     }
-    const canvas = new OffscreenCanvas(image.width, image.height)
-    const ctx = canvas.getContext('2d')
-    ctx.drawImage(image, 0, 0)
-    const imageData = ctx.getImageData(0, 0, image.width, image.height)
+    const charCols = Math.max(4, Math.round(80 * settings.scale))
+    const grid = calculateBrailleGrid(image.naturalWidth, image.naturalHeight, charCols)
+    setDimensions(grid)
 
-    const dims = estimateBrailleDimensions(image.width, image.height, settings.scale)
-    setDimensions(dims)
+    const canvas = new OffscreenCanvas(grid.srcW, grid.srcH)
+    const ctx = canvas.getContext('2d')
+    ctx.imageSmoothingEnabled = false
+    ctx.drawImage(image, 0, 0, grid.srcW, grid.srcH)
+    const imageData = ctx.getImageData(0, 0, grid.srcW, grid.srcH)
 
     const result = imageToAscii(imageData, settings)
     setAscii(result)
@@ -44,18 +45,16 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>ascii</h1>
+        <h1>asciidot</h1>
         <span className="subtitle">dot art converter</span>
       </header>
 
       <div className="preview-area">
         <div className="box">
-          <div className="box-label">Input</div>
           <ImageUploader onImageLoad={handleImageLoad} />
         </div>
         <div className="box">
-          <div className="box-label">Output</div>
-          <AsciiPreview ascii={ascii} charSet={settings.charSet} />
+          <AsciiPreview ascii={ascii} dimensions={dimensions} />
         </div>
       </div>
 

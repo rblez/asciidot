@@ -1,13 +1,32 @@
+@font-face {
+  font-family: 'Geist Pixel';
+  src: url('/fonts/GeistPixel-Square.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
+  background: #0a0a0a;
+  color: #a0a0a0;
+  font-family: 'Geist Pixel', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  isolation: isolate;
+::selection {
+  background: #e000e0;
+  color: #0a0a0a;
 }
