@@ -9,18 +9,30 @@ const STYLES = [
 
 export default function Settings({ settings, onChange, onAutoThreshold, onCopy, onSavePng }) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isTouch, setIsTouch] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(true);
   const modalRef = useRef(null);
-  const sheetRef = useRef(null);
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    setIsMobile(mq.matches);
-    const handler = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    const touchMq = window.matchMedia('(pointer: coarse)');
+    setIsTouch(touchMq.matches);
+    const touchHandler = (e) => setIsTouch(e.matches);
+    touchMq.addEventListener('change', touchHandler);
+
+    const orientMq = window.matchMedia('(orientation: landscape)');
+    setIsLandscape(orientMq.matches);
+    const orientHandler = (e) => setIsLandscape(e.matches);
+    orientMq.addEventListener('change', orientHandler);
+
+    return () => {
+      touchMq.removeEventListener('change', touchHandler);
+      orientMq.removeEventListener('change', orientHandler);
+    };
   }, []);
+
+  const isMobileLandscape = isTouch && isLandscape;
+  const isMobilePortrait = isTouch && !isLandscape;
 
   const handleChange = (key, value) => {
     onChange({ ...settings, [key]: value });
@@ -42,20 +54,127 @@ export default function Settings({ settings, onChange, onAutoThreshold, onCopy, 
     return () => document.removeEventListener('keydown', handleKey);
   }, [modalOpen]);
 
-  useEffect(() => {
-    if (!sheetOpen) return;
-    const handleKey = (e) => {
-      if (e.key === 'Escape') setSheetOpen(false);
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [sheetOpen]);
-
   const precision = settings.precision;
   const pxVal = Math.round((1 - precision) * 255);
 
+  const controls = (
+    <div className="sidebar-controls">
+      <div className="sidebar-section">
+        <div className="sidebar-row">
+          <span className="sidebar-label">Precision</span>
+          <div className="sidebar-slider-row">
+            <input
+              id="precision-s"
+              type="range"
+              min="0.05"
+              max="0.95"
+              step="0.05"
+              value={precision}
+              onChange={(e) => handleChange('precision', parseFloat(e.target.value))}
+            />
+            <span className="sidebar-value">{pxVal}px</span>
+            <button className="auto-btn" onClick={onAutoThreshold}>auto</button>
+          </div>
+        </div>
+
+        <div className="sidebar-row">
+          <span className="sidebar-label">Scale</span>
+          <div className="sidebar-slider-row">
+            <input
+              id="scale-s"
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value={settings.scale}
+              onChange={(e) => handleChange('scale', parseFloat(e.target.value))}
+            />
+            <span className="sidebar-value">{(settings.scale * 100).toFixed(0)}%</span>
+          </div>
+        </div>
+
+        <div className="sidebar-row">
+          <span className="sidebar-label">Size</span>
+          <div className="sidebar-slider-row">
+            <input
+              id="fontSize-s"
+              type="range"
+              min="8"
+              max="24"
+              step="1"
+              value={settings.fontSize}
+              onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
+            />
+            <span className="sidebar-value">{settings.fontSize}px</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="sidebar-divider" />
+
+      <div className="sidebar-section">
+        <div className="sidebar-toggle-row">
+          <span className="sidebar-label">Invert</span>
+          <label className="toggle">
+            <input
+              type="checkbox"
+              checked={settings.invert}
+              onChange={(e) => handleChange('invert', e.target.checked)}
+            />
+            <span className="toggle-slider" />
+          </label>
+        </div>
+        <div className="sidebar-toggle-row">
+          <span className="sidebar-label">Crop</span>
+          <label className="toggle">
+            <input
+              type="checkbox"
+              checked={settings.crop}
+              onChange={(e) => handleChange('crop', e.target.checked)}
+            />
+            <span className="toggle-slider" />
+          </label>
+        </div>
+      </div>
+
+      <div className="sidebar-divider" />
+
+      <div className="sidebar-section">
+        <button className="sidebar-style-btn" onClick={() => setModalOpen(true)}>
+          {currentLabel} ▸
+        </button>
+      </div>
+
+      <div className="sidebar-divider" />
+
+      <div className="sidebar-section">
+        <div className="sidebar-actions">
+          <button className="sidebar-action-btn" onClick={() => onCopy && onCopy('mono')}>copy</button>
+          <button className="sidebar-action-btn" onClick={() => onCopy && onCopy('sans')}>sans</button>
+          <button className="sidebar-action-btn" onClick={() => onSavePng && onSavePng()}>png</button>
+        </div>
+      </div>
+
+      {settings.dimensions && (
+        <div className="sidebar-dims">
+          {settings.dimensions.cols}×{settings.dimensions.rows}
+        </div>
+      )}
+    </div>
+  );
+
+  // Portrait overlay
+  if (isMobilePortrait) {
+    return (
+      <div className="rotate-overlay">
+        <div className="rotate-icon">↻</div>
+        <p className="rotate-text">rotate to landscape</p>
+      </div>
+    );
+  }
+
   // Desktop: flat bar
-  if (!isMobile) {
+  if (!isTouch) {
     return (
       <>
         <div className="settings">
@@ -164,130 +283,22 @@ export default function Settings({ settings, onChange, onAutoThreshold, onCopy, 
     );
   }
 
-  // Mobile: bottom sheet
+  // Mobile landscape: sidebar
   return (
     <>
-      {/* Collapsed bar */}
-      <div className="sheet-collapsed" onClick={() => setSheetOpen(true)}>
-        <span className="sheet-handle" />
-        <span className="sheet-preview">
-          {settings.dimensions
-            ? `${settings.dimensions.cols}×${settings.dimensions.rows}`
-            : '—×—'} · {pxVal}px · {(settings.scale * 100).toFixed(0)}%
-        </span>
-      </div>
-
-      {/* Expanded sheet */}
-      <div className={`sheet-backdrop${sheetOpen ? ' open' : ''}`} onClick={() => setSheetOpen(false)} />
-      <div className={`sheet-panel${sheetOpen ? ' open' : ''}`} ref={sheetRef}>
-        <div className="sheet-header">
-          <span className="sheet-handle" />
-          <span className="sheet-title">settings</span>
-          <button className="sheet-close" onClick={() => setSheetOpen(false)}>✕</button>
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <span className="sidebar-title">settings</span>
+          <button className="sidebar-toggle" onClick={() => setSidebarOpen(o => !o)}>
+            {sidebarOpen ? '▸' : '◂'}
+          </button>
         </div>
+        {sidebarOpen && controls}
+      </aside>
 
-        <div className="sheet-body">
-          {/* Precision */}
-          <div className="sheet-row">
-            <div className="sheet-row-label">Precision</div>
-            <div className="sheet-row-control">
-              <input
-                id="precision-m"
-                type="range"
-                min="0.05"
-                max="0.95"
-                step="0.05"
-                value={precision}
-                onChange={(e) => handleChange('precision', parseFloat(e.target.value))}
-              />
-              <span className="setting-value">{pxVal}px</span>
-              <button className="auto-btn" onClick={onAutoThreshold}>auto</button>
-            </div>
-          </div>
-
-          {/* Scale */}
-          <div className="sheet-row">
-            <div className="sheet-row-label">Scale</div>
-            <div className="sheet-row-control">
-              <input
-                id="scale-m"
-                type="range"
-                min="0.1"
-                max="1"
-                step="0.05"
-                value={settings.scale}
-                onChange={(e) => handleChange('scale', parseFloat(e.target.value))}
-              />
-              <span className="setting-value">{(settings.scale * 100).toFixed(0)}%</span>
-            </div>
-          </div>
-
-          {/* Size */}
-          <div className="sheet-row">
-            <div className="sheet-row-label">Size</div>
-            <div className="sheet-row-control">
-              <input
-                id="fontSize-m"
-                type="range"
-                min="8"
-                max="24"
-                step="1"
-                value={settings.fontSize}
-                onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
-              />
-              <span className="setting-value">{settings.fontSize}px</span>
-            </div>
-          </div>
-
-          {/* Toggles */}
-          <div className="sheet-toggles">
-            <div className="sheet-toggle-row">
-              <span className="sheet-toggle-label">Invert</span>
-              <label className="toggle">
-                <input
-                  type="checkbox"
-                  checked={settings.invert}
-                  onChange={(e) => handleChange('invert', e.target.checked)}
-                />
-                <span className="toggle-slider" />
-              </label>
-            </div>
-            <div className="sheet-toggle-row">
-              <span className="sheet-toggle-label">Crop</span>
-              <label className="toggle">
-                <input
-                  type="checkbox"
-                  checked={settings.crop}
-                  onChange={(e) => handleChange('crop', e.target.checked)}
-                />
-                <span className="toggle-slider" />
-              </label>
-            </div>
-          </div>
-
-          {/* Style trigger */}
-          <div className="sheet-row">
-            <div className="sheet-row-label">Style</div>
-            <div className="sheet-row-control">
-              <button className="style-trigger" onClick={() => setModalOpen(true)}>
-                {currentLabel}
-              </button>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="sheet-actions">
-            <button className="copy-btn" onClick={() => { onCopy && onCopy('mono'); setSheetOpen(false); }}>[ copy ]</button>
-            <button className="copy-btn" onClick={() => { onCopy && onCopy('sans'); setSheetOpen(false); }}>[ copy sans ]</button>
-            <button className="copy-btn" onClick={() => { onSavePng && onSavePng(); setSheetOpen(false); }}>[ save png ]</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Style modal (same as desktop) */}
       {modalOpen && (
         <div className="modal-backdrop" onClick={() => setModalOpen(false)}>
-          <div className="modal-box" ref={modalRef} onClick={(e) => e.stopPropagation()}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-title">select style</div>
             {STYLES.map((s) => (
               <div
