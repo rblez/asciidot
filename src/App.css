@@ -510,6 +510,13 @@
   display: none;
 }
 
+/* Hide mobile sheet elements on desktop */
+.sheet-collapsed,
+.sheet-backdrop,
+.sheet-panel {
+  display: none;
+}
+
 /* ── Auto threshold button ── */
 .auto-btn {
   font-family: 'Geist Pixel', monospace;
@@ -670,7 +677,7 @@
   /* Split panels → stack */
   .preview-area {
     flex-direction: column;
-    padding-bottom: 140px;
+    padding-bottom: 40px;
   }
   .box {
     width: 100%;
@@ -682,171 +689,180 @@
     border-bottom: 1px solid #2a2a2a;
   }
 
-  /* ── Settings as fixed floating nav footer ── */
+  /* Hide desktop settings bar on mobile */
   .settings {
+    display: none;
+  }
+
+  /* ── Bottom sheet collapsed bar ── */
+  .sheet-collapsed {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 10;
-    height: auto;
-    min-height: auto;
-    padding: 0;
-    flex-wrap: wrap;
-    gap: 0;
-    border-top: 1px solid #2a2a2a;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     background: rgba(10, 10, 10, 0.92);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 44px 44px 44px;
-    align-items: stretch;
-    justify-content: stretch;
+    border-top: 1px solid #2a2a2a;
+    cursor: pointer;
   }
-
-  /* Hide mobile extras on desktop */
-  .mobile-auto {
-    display: none;
-  }
-  .mobile-actions {
-    display: none;
-  }
-  /* On mobile show them */
-  .mobile-auto {
-    display: flex;
-  }
-  .mobile-actions {
-    display: flex;
-  }
-
-  .settings > .setting-group {
-    margin: 0;
-    padding: 0 8px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    border-bottom: 1px solid #2a2a2a;
-    box-sizing: border-box;
-  }
-  .settings > .setting-group:last-of-type {
-    display: none;
-  }
-
-  .setting-group + .setting-group::before {
-    display: none;
-  }
-
-  /* Row 1 col 1: Precision */
-  .settings > .setting-group:nth-of-type(1) {
-    grid-column: 1;
-    grid-row: 1;
-    padding: 0 8px 0 12px;
-    border-right: 1px solid #2a2a2a;
-  }
-  .settings > .setting-group:nth-of-type(1) label {
+  .sheet-handle {
     display: block;
-    font-size: 10px;
-    color: #444;
-    margin-right: 2px;
-    white-space: nowrap;
-  }
-  .settings > .setting-group:nth-of-type(1) .auto-btn {
-    display: none;
-  }
-  .settings > .setting-group:nth-of-type(1) input {
-    width: 100%;
-  }
-  .settings > .setting-group:nth-of-type(1) .setting-value {
-    font-size: 10px;
-    color: #fff;
-    min-width: 28px;
-  }
-
-  /* Row 1 col 2: Scale */
-  .settings > .setting-group:nth-of-type(2) {
-    grid-column: 2;
-    grid-row: 1;
-    padding: 0 12px 0 8px;
-  }
-  .settings > .setting-group:nth-of-type(2) label {
-    display: block;
-    font-size: 10px;
-    color: #444;
-    margin-right: 2px;
-    white-space: nowrap;
-  }
-  .settings > .setting-group:nth-of-type(2) input {
-    width: 100%;
-  }
-  .settings > .setting-group:nth-of-type(2) .setting-value {
-    font-size: 10px;
-    color: #fff;
-    min-width: 28px;
-  }
-
-  /* Row 2: toggles + styles + auto (span both columns) */
-  .settings > .setting-group:nth-of-type(3),
-  .settings > .setting-group:nth-of-type(4),
-  .settings > .setting-group:nth-of-type(6) {
-    grid-row: 2;
-    border-bottom: 1px solid #2a2a2a;
-    border-right: none;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 4px;
-  }
-  .settings > .setting-group:nth-of-type(3) {
-    grid-column: 1;
-  }
-  .settings > .setting-group:nth-of-type(4) {
-    grid-column: 1;
-    margin-left: 50%;
-  }
-  .settings > .setting-group:nth-of-type(6) {
-    grid-column: 2;
-    margin-right: auto;
-    border-right: 1px solid #2a2a2a;
-  }
-
-  .settings > .setting-group:nth-of-type(3) label,
-  .settings > .setting-group:nth-of-type(4) label {
-    font-size: 10px;
-    color: #444;
-    white-space: nowrap;
-  }
-  .settings > .setting-group:nth-of-type(3) .toggle,
-  .settings > .setting-group:nth-of-type(4) .toggle {
-    width: 28px;
-    height: 14px;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: #444;
     flex-shrink: 0;
   }
-  .settings > .setting-group:nth-of-type(3) .toggle-slider::before,
-  .settings > .setting-group:nth-of-type(4) .toggle-slider::before {
-    width: 8px;
-    height: 8px;
-    left: 2px;
-    bottom: 2px;
-  }
-  .settings > .setting-group:nth-of-type(3) input:checked + .toggle-slider::before,
-  .settings > .setting-group:nth-of-type(4) input:checked + .toggle-slider::before {
-    transform: translateX(13px);
-  }
-
-  .settings > .setting-group:nth-of-type(6) .style-trigger {
+  .sheet-preview {
+    font-family: 'Geist Pixel', monospace;
     font-size: 10px;
-    min-height: auto;
-    width: auto;
+    color: #555;
+    line-height: 1;
+    user-select: none;
   }
 
-  /* auto button in row 2 */
-  .mobile-auto {
-    grid-row: 2;
-    grid-column: 2;
-    justify-self: end;
-    align-self: center;
-    margin-right: 8px;
+  /* ── Sheet backdrop ── */
+  .sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .sheet-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Expanded sheet panel ── */
+  .sheet-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 21;
+    background: #1a1a1a;
+    border-top: 1px solid #2a2a2a;
+    max-height: 65vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+  }
+  .sheet-panel.open {
+    transform: translateY(0);
+  }
+
+  .sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid #222;
+    position: sticky;
+    top: 0;
+    background: #1a1a1a;
+    z-index: 1;
+  }
+  .sheet-header .sheet-handle {
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8px;
+  }
+  .sheet-title {
+    font-family: 'Geist Pixel', monospace;
+    font-size: 11px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    visibility: hidden;
+  }
+  .sheet-close {
+    font-family: 'Geist Pixel', monospace;
+    font-size: 14px;
+    color: #555;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    margin-left: auto;
+  }
+  .sheet-close:hover {
+    color: #e000e0;
+  }
+
+  .sheet-body {
+    padding: 4px 0 20px;
+  }
+
+  .sheet-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .sheet-row-label {
+    font-family: 'Geist Pixel', monospace;
+    font-size: 10px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 56px;
+    flex-shrink: 0;
+  }
+  .sheet-row-control {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sheet-row-control input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 1px;
+    background: #222;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+  }
+  .sheet-row-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #e000e0;
+    cursor: pointer;
+    border: none;
+  }
+  .sheet-row-control input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #e000e0;
+    cursor: pointer;
+    border: none;
+  }
+  .sheet-row-control .setting-value {
+    font-size: 10px;
+    color: #fff;
+    min-width: 32px;
+    font-family: 'Geist Pixel', monospace;
+  }
+  .sheet-row-control .auto-btn {
     font-size: 10px;
     padding: 2px 8px;
     font-family: 'Geist Pixel', monospace;
@@ -855,79 +871,71 @@
     border: 1px solid #2a2a2a;
     cursor: pointer;
     line-height: 1.4;
-    height: 28px;
+    flex-shrink: 0;
   }
-  .mobile-auto:hover {
+  .sheet-row-control .auto-btn:hover {
     border-color: #e000e0;
     color: #e000e0;
   }
 
-  /* Row 3: Size slider + actions (span both columns) */
-  .settings > .setting-group:nth-of-type(5) {
-    grid-column: 1;
-    grid-row: 3;
-    border-bottom: none;
-    border-right: 1px solid #2a2a2a;
-    padding: 0 8px 0 12px;
+  /* Toggles row */
+  .sheet-toggles {
+    display: flex;
+    padding: 6px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    gap: 24px;
   }
-  .settings > .setting-group:nth-of-type(5) label {
-    display: block;
-    font-size: 10px;
-    color: #444;
-    margin-right: 2px;
-    white-space: nowrap;
-  }
-  .settings > .setting-group:nth-of-type(5) input {
-    width: 100%;
-  }
-  .settings > .setting-group:nth-of-type(5) .setting-value {
-    font-size: 10px;
-    color: #fff;
-    min-width: 24px;
-  }
-
-  .mobile-actions {
-    grid-column: 2;
-    grid-row: 3;
+  .sheet-toggle-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 8px;
-    border-bottom: none;
+    gap: 8px;
   }
-  .mobile-actions .copy-btn {
-    font-size: 10px;
-    padding: 4px 8px;
-    border: 1px solid #2a2a2a;
-    background: none;
-    color: #555;
+  .sheet-toggle-label {
     font-family: 'Geist Pixel', monospace;
-    cursor: pointer;
-    line-height: 1.4;
-    white-space: nowrap;
+    font-size: 10px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
-  .mobile-actions .copy-btn:hover {
+
+  /* Style trigger in sheet */
+  .sheet-row .style-trigger {
+    font-family: 'Geist Pixel', monospace;
+    font-size: 11px;
+    color: #555;
+    background: none;
+    border: 1px solid #2a2a2a;
+    padding: 6px 16px;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .sheet-row .style-trigger:hover {
     border-color: #e000e0;
     color: #e000e0;
   }
-  .mobile-actions .save-png-btn {
-    margin-left: 0;
-  }
 
-  /* Hide desktop auto button on mobile */
-  .setting-group:nth-of-type(1) .auto-btn {
-    display: none;
+  /* Actions row */
+  .sheet-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    justify-content: center;
   }
-
-  /* Mobile slider thumbs */
-  .settings input[type="range"]::-webkit-slider-thumb {
-    width: 16px;
-    height: 16px;
+  .sheet-actions .copy-btn {
+    font-family: 'Geist Pixel', monospace;
+    font-size: 11px;
+    color: #555;
+    background: none;
+    border: 1px solid #2a2a2a;
+    padding: 8px 14px;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.15s, color 0.15s;
   }
-  .settings input[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+  .sheet-actions .copy-btn:hover {
+    border-color: #e000e0;
+    color: #e000e0;
   }
 
   /* ── Output toolbar ── */
@@ -979,12 +987,6 @@
   }
   .adjust-group input[type="range"] {
     width: 80px;
-  }
-
-  /* ── Mobile: auto button ── */
-  .auto-btn {
-    font-size: 0.5rem;
-    padding: 1px 4px;
   }
 
   /* ── Mobile: history strip ── */
