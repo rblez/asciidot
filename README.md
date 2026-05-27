@@ -1,16 +1,40 @@
-# React + Vite
+# asciidot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Convert images to braille-dot ASCII art in the browser.
 
-Currently, two official plugins are available:
+Upload an image (PNG, JPEG, WebP, SVG) and get a braille character representation rendered on canvas. Supports multiple rendering styles, export to clipboard or `.txt` file, and fully responsive mobile layout.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **4 rendering styles**: Basic (hard threshold), Outline Contrast (Sobel 3×3), Simplified (Floyd-Steinberg dithering), No Dithering (nearest neighbor)
+- **Image upload**: drag & drop, paste, or file picker. Max 2048×2048px
+- **Canvas rendering**: braille output on pixelated canvas with scanline overlay
+- **Export**: mono or sans-serif spacing, to clipboard or `.txt` download
+- **Controls**: precision, scale, invert toggle, and style selector
+- **Responsive**: mobile-optimized layout at ≤768px
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+- React 19 + Vite
+- OffscreenCanvas for image processing and braille rendering
+- Self-hosted Geist Pixel Square font
+- Plain CSS (no Tailwind, no CSS-in-JS)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting started
+
+```bash
+bun install
+bun run dev
+```
+
+Build for production:
+
+```bash
+bun run build
+```
+
+Serve the `dist/` folder.
+
+## License
+
+MIT
