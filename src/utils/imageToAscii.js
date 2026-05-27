@@ -89,6 +89,76 @@ const STYLE_FUNCS = {
   nodithering: { name: 'No Dithering', apply: applyBasic },
 };
 
+export function applyContrastBrightness(data, width, height, contrast, brightness) {
+  if (contrast === 0 && brightness === 0) return;
+  const factor = contrast / 100 + 1;
+  for (let i = 0; i < width * height; i++) {
+    const idx = i * 4;
+    data[idx] = Math.max(0, Math.min(255, Math.round(data[idx] * factor + brightness)));
+    data[idx + 1] = Math.max(0, Math.min(255, Math.round(data[idx + 1] * factor + brightness)));
+    data[idx + 2] = Math.max(0, Math.min(255, Math.round(data[idx + 2] * factor + brightness)));
+  }
+}
+
+export function otsuThreshold(gray) {
+  const hist = new Uint32Array(256);
+  for (let i = 0; i < gray.length; i++) {
+    hist[gray[i]]++;
+  }
+  const total = gray.length;
+  let sum = 0;
+  for (let i = 0; i < 256; i++) sum += i * hist[i];
+  let sumB = 0, wB = 0, maxVariance = 0, threshold = 0;
+  for (let t = 0; t < 256; t++) {
+    wB += hist[t];
+    if (wB === 0) continue;
+    const wF = total - wB;
+    if (wF === 0) break;
+    sumB += t * hist[t];
+    const meanB = sumB / wB;
+    const meanF = (sum - sumB) / wF;
+    const variance = wB * wF * (meanB - meanF) * (meanB - meanF);
+    if (variance > maxVariance) {
+      maxVariance = variance;
+      threshold = t;
+    }
+  }
+  return threshold;
+}
+
+export function cropWhitespace(ascii, originalCols) {
+  const rows = ascii.split('\n');
+  if (rows.length === 0) return { ascii, cols: originalCols, rows: rows.length };
+  const cols = rows[0].length;
+  let top = 0, bottom = rows.length - 1;
+  let left = 0, right = cols - 1;
+
+  while (top <= bottom && rows[top].split('').every(ch => ch === '\u2800')) top++;
+  while (bottom >= top && rows[bottom].split('').every(ch => ch === '\u2800')) bottom--;
+  if (top > bottom) return { ascii: '', cols: 0, rows: 0 };
+
+  while (left <= right) {
+    let allEmpty = true;
+    for (let r = top; r <= bottom; r++) {
+      if (rows[r][left] !== '\u2800') { allEmpty = false; break; }
+    }
+    if (allEmpty) left++; else break;
+  }
+  while (right >= left) {
+    let allEmpty = true;
+    for (let r = top; r <= bottom; r++) {
+      if (rows[r][right] !== '\u2800') { allEmpty = false; break; }
+    }
+    if (allEmpty) right--; else break;
+  }
+
+  const croppedRows = [];
+  for (let r = top; r <= bottom; r++) {
+    croppedRows.push(rows[r].slice(left, right + 1));
+  }
+  return { ascii: croppedRows.join('\n'), cols: right - left + 1, rows: bottom - top + 1 };
+}
+
 export function imageToAscii(imageData, { style, precision, invert }) {
   const { width, height, data } = imageData;
   const threshold = Math.round((1 - precision) * 255);

@@ -506,9 +506,152 @@
   letter-spacing: 0.02em;
 }
 
-.mobile-text,
-.nav-credit {
+.mobile-text {
   display: none;
+}
+
+/* ── Auto threshold button ── */
+.auto-btn {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 0.55rem;
+  color: #555;
+  background: none;
+  border: 1px solid #333;
+  padding: 1px 6px;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: border-color 0.15s, color 0.15s;
+}
+.auto-btn:hover {
+  border-color: #e000e0;
+  color: #e000e0;
+}
+
+/* ── Adjust bar (contrast/brightness) ── */
+.adjust-bar {
+  border-bottom: 1px solid #222;
+  background: #1a1a1a;
+}
+.adjust-toggle {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 0.6rem;
+  color: #444;
+  background: none;
+  border: none;
+  padding: 4px 24px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.adjust-toggle:hover {
+  color: #e000e0;
+}
+.adjust-controls {
+  display: flex;
+  gap: 24px;
+  padding: 4px 24px 8px;
+}
+.adjust-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.adjust-group label {
+  font-size: 0.6rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.adjust-group input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 1px;
+  background: #222;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+.adjust-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  background: #e000e0;
+  cursor: pointer;
+  border: none;
+}
+.adjust-group input[type="range"]::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  background: #e000e0;
+  cursor: pointer;
+  border: none;
+}
+
+/* ── History strip ── */
+.history-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  z-index: 2;
+  overflow-x: auto;
+  background: rgba(26, 26, 26, 0.85);
+}
+.history-thumb {
+  background: none;
+  border: 1px solid #333;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 28px;
+  width: auto;
+  transition: border-color 0.15s;
+}
+.history-thumb:hover {
+  border-color: #e000e0;
+}
+.history-canvas {
+  display: block;
+  height: 100%;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+/* ── Save PNG button ── */
+.save-png-btn {
+  margin-left: 4px;
+}
+
+/* ── Drag hint ── */
+.drag-hint {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #333;
+  font-size: 10px;
+  font-family: 'Geist Pixel', monospace;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ascii-preview.has-output:hover .drag-hint {
+  opacity: 1;
+}
+
+/* ── Copy flash ── */
+.copy-btn.flash {
+  border-color: #e000e0;
+  color: #e000e0;
 }
 
 /* ── Mobile (max-width 768px) ── */
@@ -624,20 +767,6 @@
     display: none;
   }
 
-  /* Credit line in nav footer */
-  .nav-credit {
-    display: inline;
-    font-size: 0.55rem;
-    color: #333;
-    font-family: 'Geist Pixel', monospace;
-    white-space: nowrap;
-    line-height: 1;
-  }
-  .nav-credit a {
-    color: #444;
-    text-decoration: none;
-  }
-
   /* ── Output toolbar ── */
   .copy-btn {
     padding: 6px 10px;
@@ -673,5 +802,45 @@
   .upload-hint {
     white-space: normal;
     padding: 0 16px;
+  }
+
+  /* ── Mobile: adjust bar ── */
+  .adjust-toggle {
+    padding: 4px 16px;
+    font-size: 0.55rem;
+  }
+  .adjust-controls {
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 16px 8px;
+  }
+  .adjust-group input[type="range"] {
+    width: 80px;
+  }
+
+  /* ── Mobile: auto button ── */
+  .auto-btn {
+    font-size: 0.5rem;
+    padding: 1px 4px;
+  }
+
+  /* ── Mobile: history strip ── */
+  .history-strip {
+    height: 32px;
+    padding: 2px 4px;
+  }
+  .history-thumb {
+    height: 26px;
+  }
+
+  /* ── Mobile: drag hint ── */
+  .drag-hint {
+    font-size: 8px;
+    bottom: 4px;
+  }
+
+  /* ── Mobile: save png ── */
+  .save-png-btn {
+    display: none;
   }
 }
