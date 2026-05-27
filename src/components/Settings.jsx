@@ -7,7 +7,7 @@ const STYLES = [
   { key: 'nodithering', label: 'No Dithering', desc: 'nearest neighbor' },
 ];
 
-export default function Settings({ settings, onChange, onAutoThreshold }) {
+export default function Settings({ settings, onChange, onAutoThreshold, onCopy, onSavePng }) {
   const [modalOpen, setModalOpen] = useState(false);
   const modalRef = useRef(null);
 
@@ -112,12 +112,19 @@ export default function Settings({ settings, onChange, onAutoThreshold }) {
           </button>
         </div>
 
+        <button className="auto-btn mobile-auto" onClick={onAutoThreshold}>auto</button>
+
         <div className="setting-group">
           <span className="dimensions-label">
             {settings.dimensions
               ? `${settings.dimensions.cols}×${settings.dimensions.rows}`
               : '—×—'}
           </span>
+        </div>
+
+        <div className="mobile-actions">
+          <button className="copy-btn" onClick={() => onCopy && onCopy('mono')}>[ copy ]</button>
+          <button className="copy-btn save-png-btn" onClick={onSavePng}>[ save png ]</button>
         </div>
       </div>
 
