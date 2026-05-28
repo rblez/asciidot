@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon, ComputerDesktopIcon } from '@heroicons/react/20/solid'
 import ImageUploader from './components/ImageUploader'
 import AsciiPreview from './components/AsciiPreview'
 import Settings from './components/Settings'
@@ -62,7 +62,7 @@ function App() {
   if (!isDesktop) {
     return (
       <div className="desktop-only">
-        <div className="desktop-only-icon">🖥</div>
+        <ComputerDesktopIcon className="desktop-only-icon" />
         <p className="desktop-only-text">desktop only</p>
       </div>
     )

@@ -96,7 +96,9 @@
 }
 
 .desktop-only-icon {
-  font-size: 48px;
+  width: 56px;
+  height: 56px;
+  color: #555;
 }
 
 .desktop-only-text {
