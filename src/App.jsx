@@ -195,7 +195,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="app-header-left">
-          <h1>asciidot</h1>
+          <h1>ASCIIdot</h1>
           <span className="subtitle">dot art converter</span>
         </div>
         <div className="app-header-right">
