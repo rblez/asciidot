@@ -697,14 +697,13 @@
   .app {
     display: grid;
     grid-template-columns: 1fr 220px;
-    grid-template-rows: 48px auto 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
-      "header header"
       "adjust adjust"
       "preview sidebar";
   }
   .app-header {
-    grid-area: header;
+    display: none;
   }
   .adjust-bar {
     grid-area: adjust;
