@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, ChevronRightIcon, ComputerDesktopIcon } from '@heroicons/react/20/solid'
+import { ComputerDesktopIcon } from '@heroicons/react/20/solid'
 import ImageUploader from './components/ImageUploader'
 import AsciiPreview from './components/AsciiPreview'
 import Settings from './components/Settings'
@@ -47,7 +47,6 @@ function App() {
   const [dimensions, setDimensions] = useState(null)
   const [history, setHistory] = useState([])
   const [copiedStyle, setCopiedStyle] = useState(null)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isDesktop, setIsDesktop] = useState(() =>
     window.matchMedia('(pointer: fine)').matches
   )
@@ -230,10 +229,7 @@ function App() {
           </div>
         </div>
 
-        <div className={`sidebar${sidebarOpen ? ' open' : ' closed'}`}>
-          <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} title={sidebarOpen ? 'collapse' : 'expand'}>
-            {sidebarOpen ? <ChevronRightIcon className="sidebar-toggle-icon" /> : <ChevronLeftIcon className="sidebar-toggle-icon" />}
-          </button>
+        <div className="sidebar">
           <div className="sidebar-content">
             <Settings
               settings={{ ...settings, dimensions }}
