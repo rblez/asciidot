@@ -114,13 +114,13 @@ export default function Settings({ settings, onChange, onAutoThreshold }) {
           </button>
         </div>
 
-        <div className="control-group">
-          <span className="control-label output-dims">
-            {settings.dimensions
-              ? `${settings.dimensions.cols}×${settings.dimensions.rows}`
-              : '—×—'}
-          </span>
-        </div>
+        {settings.dimensions && (
+          <div className="control-group">
+            <span className="control-label output-dims">
+              {settings.dimensions.cols}×{settings.dimensions.rows}
+            </span>
+          </div>
+        )}
       </div>
 
       {modalOpen && (
