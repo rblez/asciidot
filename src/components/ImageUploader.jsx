@@ -100,11 +100,6 @@ export default function ImageUploader({ onImageLoad }) {
           <span className="uploader-hint">drop / paste / click</span>
         </>
       )}
-      {!preview && !error && (
-        <p className="uploader-description">
-          best results with high contrast images — black &amp; white, monochrome, bold two-tone colors, or svg
-        </p>
-      )}
     </div>
   );
 }

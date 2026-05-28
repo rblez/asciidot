@@ -242,6 +242,10 @@ function App() {
           </div>
         </div>
       </div>
+
+      <div className="notif-bar">
+        best results with high contrast images — black &amp; white, monochrome, bold two-tone colors, or svg
+      </div>
     </div>
   )
 }
