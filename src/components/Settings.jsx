@@ -36,7 +36,7 @@ export default function Settings({ settings, onChange, onAutoThreshold }) {
 
   return (
     <>
-      <div className="controls-strip">
+      <div>
         <div className="control-group">
           <span className="control-label">Precision</span>
           <div className="slider-wrap">

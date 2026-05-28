@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { ArrowUpTrayIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import ImageUploader from './components/ImageUploader'
 import AsciiPreview from './components/AsciiPreview'
 import Settings from './components/Settings'
@@ -46,6 +47,7 @@ function App() {
   const [dimensions, setDimensions] = useState(null)
   const [history, setHistory] = useState([])
   const [copiedStyle, setCopiedStyle] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isDesktop, setIsDesktop] = useState(true)
   const copyTimer = useRef(null)
 
@@ -209,30 +211,37 @@ function App() {
         </div>
       </header>
 
-      <div className="preview-area">
-        <div className="box">
-          <ImageUploader onImageLoad={handleImageLoad} />
+      <div className="main-area">
+        <div className="preview-area">
+          <div className="box">
+            <ImageUploader onImageLoad={handleImageLoad} />
+          </div>
+          <div className="box">
+            <AsciiPreview
+              ascii={ascii}
+              dimensions={dimensions}
+              fontSize={settings.fontSize}
+              history={history}
+              onHistorySelect={handleHistorySelect}
+              onCopy={handleCopy}
+              copiedStyle={copiedStyle}
+            />
+          </div>
         </div>
-        <div className="box">
-          <AsciiPreview
-            ascii={ascii}
-            dimensions={dimensions}
-            fontSize={settings.fontSize}
-            history={history}
-            onHistorySelect={handleHistorySelect}
-            onCopy={handleCopy}
-            copiedStyle={copiedStyle}
-          />
+
+        <div className={`sidebar${sidebarOpen ? ' open' : ' closed'}`}>
+          <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} title={sidebarOpen ? 'collapse' : 'expand'}>
+            {sidebarOpen ? <ChevronRightIcon className="sidebar-toggle-icon" /> : <ChevronLeftIcon className="sidebar-toggle-icon" />}
+          </button>
+          <div className="sidebar-content">
+            <Settings
+              settings={{ ...settings, dimensions }}
+              onChange={handleSettingsChange}
+              onAutoThreshold={handleAutoThreshold}
+            />
+          </div>
         </div>
       </div>
-
-      <Settings
-        settings={{ ...settings, dimensions }}
-        onChange={handleSettingsChange}
-        onAutoThreshold={handleAutoThreshold}
-        onCopy={handleCopy}
-        onSavePng={handleSavePng}
-      />
     </div>
   )
 }
