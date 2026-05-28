@@ -6,6 +6,32 @@
   background: #1a1a1a;
 }
 
+/* ── Desktop-only overlay ── */
+.desktop-only {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.desktop-only-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+.desktop-only-text {
+  font-family: 'Geist Pixel', monospace;
+  font-size: 14px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  user-select: none;
+  margin: 0;
+}
+
 /* ── Header ── */
 .app-header {
   height: 48px;
@@ -587,49 +613,7 @@
 }
 
 /* ── Copy flash ── */
-
-/* ── Small viewport / responsive wrapping ── */
-@media (max-width: 900px) {
-  .settings {
-    height: auto;
-    min-height: auto;
-    flex-wrap: wrap;
-    padding: 4px 12px;
-    gap: 2px 0;
-  }
-  .setting-group {
-    height: 36px;
-  }
-  .setting-group + .setting-group::before {
-    margin: 0 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    padding-left: 16px;
-  }
-  .app-header h1 {
-    font-size: 1.5rem;
-  }
-  .subtitle {
-    display: none;
-  }
-
-  .upload-placeholder .desktop-text {
-    display: none;
-  }
-  .upload-placeholder .mobile-text {
-    display: block;
-    font-size: 0.7rem;
-    line-height: 1.4;
-    color: #2a2a2a;
-    user-select: none;
-    text-align: center;
-  }
-
-  .upload-hint {
-    white-space: normal;
-    padding: 0 16px;
-  }
+.copy-btn.flash {
+  border-color: #e000e0;
+  color: #e000e0;
 }

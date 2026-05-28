@@ -21,7 +21,25 @@ function App() {
   const [dimensions, setDimensions] = useState(null)
   const [history, setHistory] = useState([])
   const [copiedStyle, setCopiedStyle] = useState(null)
+  const [isDesktop, setIsDesktop] = useState(true)
   const copyTimer = useRef(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(pointer: fine)')
+    setIsDesktop(mq.matches)
+    const handler = (e) => setIsDesktop(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  if (!isDesktop) {
+    return (
+      <div className="desktop-only">
+        <div className="desktop-only-icon">🖥</div>
+        <p className="desktop-only-text">desktop only</p>
+      </div>
+    )
+  }
 
   const handleImageLoad = useCallback((img) => {
     setImage(img)

@@ -98,10 +98,9 @@ export default function ImageUploader({ onImageLoad }) {
         </>
       ) : (
         <div className="upload-placeholder">
-          <p className="desktop-text">drop</p>
-          <p className="desktop-text">/ paste</p>
-          <p className="desktop-text">/ click</p>
-          <p className="mobile-text">tap to upload</p>
+          <p>drop</p>
+          <p>/ paste</p>
+          <p>/ click</p>
         </div>
       )}
       {!preview && !error && (
