@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { ClipboardDocumentIcon, ArrowDownTrayIcon } from '@heroicons/react/20/solid';
 
 export default function AsciiPreview({ ascii, dimensions, fontSize = 14, history, onHistorySelect, onCopy, copiedStyle }) {
   const canvasRef = useRef(null);
@@ -37,7 +38,6 @@ export default function AsciiPreview({ ascii, dimensions, fontSize = 14, history
     }
   }, [ascii, dimensions, fontSize, cellW, cellH]);
 
-  // Render thumbnails
   useEffect(() => {
     history.forEach((entry, idx) => {
       const canvas = thumbRefs.current[idx];
@@ -128,15 +128,15 @@ export default function AsciiPreview({ ascii, dimensions, fontSize = 14, history
 
   if (!ascii) {
     return (
-      <div className="ascii-preview empty">
-        <p className="placeholder-text">output appears here</p>
+      <div className="output-panel">
+        <div className="output-empty">output appears here</div>
       </div>
     );
   }
 
   return (
     <>
-      <div className="ascii-preview has-output">
+      <div className="output-panel">
         {history.length > 0 && (
           <div className="history-strip">
             {history.map((entry, idx) => (
@@ -148,59 +148,73 @@ export default function AsciiPreview({ ascii, dimensions, fontSize = 14, history
               >
                 <canvas
                   ref={(el) => { thumbRefs.current[idx] = el; }}
-                  className="history-canvas"
                 />
               </button>
             ))}
           </div>
         )}
         <div className="output-toolbar">
-          {dimensions && (
-            <span className="output-dims">{dimensions.cols}×{dimensions.rows}</span>
-          )}
-          <button className={`copy-btn${copiedStyle ? ' flash' : ''}`} onClick={() => setExportOpen(true)}>
-            [ copy ]
-          </button>
-          <button className="copy-btn save-png-btn" onClick={handleSavePng}>
-            [ save png ]
-          </button>
+          <div className="output-toolbar-left">
+            {dimensions && (
+              <span className="output-dims">{dimensions.cols}×{dimensions.rows}</span>
+            )}
+          </div>
+          <div className="output-toolbar-right">
+            <button
+              className={`btn${copiedStyle ? ' btn-flash' : ''}`}
+              onClick={() => setExportOpen(true)}
+            >
+              <ClipboardDocumentIcon className="btn-icon" />
+              copy
+            </button>
+            <button className="btn" onClick={handleSavePng}>
+              <ArrowDownTrayIcon className="btn-icon" />
+              save png
+            </button>
+          </div>
         </div>
-        <canvas
-          ref={canvasRef}
-          className="ascii-canvas"
-          draggable="true"
-          onDragStart={handleDragStart}
-        />
-        <span className="drag-hint">drag to save</span>
+        <div className="output-canvas-wrap">
+          <canvas
+            ref={canvasRef}
+            className="ascii-canvas"
+            draggable="true"
+            onDragStart={handleDragStart}
+          />
+          <span className="drag-hint">drag to save</span>
+        </div>
       </div>
 
       {exportOpen && (
         <div className="modal-backdrop" onClick={() => setExportOpen(false)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-title">export</div>
 
-            <div className="modal-section-label">style</div>
-            <div className="export-pills" role="radiogroup">
+            <div className="modal-subtitle">style</div>
+            <div className="modal-options">
               {['mono', 'sans'].map((mode) => (
                 <button
                   key={mode}
-                  className={`export-pill${exportMode === mode ? ' active' : ''}`}
+                  className={`modal-option${exportMode === mode ? ' selected' : ''}`}
                   onClick={() => setExportMode(mode)}
                 >
-                  {mode}
+                  <div className="modal-radio">
+                    {exportMode === mode && <div className="modal-radio-inner" />}
+                  </div>
+                  <span>{mode}</span>
+                  <span className="modal-option-label">{mode === 'mono' ? 'default' : 'zero-width spaces'}</span>
                 </button>
               ))}
             </div>
 
-            <div className="modal-section-label">destination</div>
-            <div className="export-pills" role="radiogroup">
+            <div className="modal-subtitle">destination</div>
+            <div className="modal-destinations">
               {[
                 { key: 'clipboard', label: 'clipboard' },
                 { key: 'file', label: '.txt file' },
               ].map((d) => (
                 <button
                   key={d.key}
-                  className={`export-pill${exportDest === d.key ? ' active' : ''}`}
+                  className={`modal-destination${exportDest === d.key ? ' selected' : ''}`}
                   onClick={() => setExportDest(d.key)}
                 >
                   {d.label}
@@ -208,9 +222,16 @@ export default function AsciiPreview({ ascii, dimensions, fontSize = 14, history
               ))}
             </div>
 
-            <button className="export-btn" onClick={handleExport}>
-              {exportDest === 'clipboard' ? 'copy →' : 'download →'}
-            </button>
+            <div className="modal-actions">
+              <button className="btn" onClick={() => setExportOpen(false)}>cancel</button>
+              <button
+                className="btn"
+                onClick={handleExport}
+                style={exportDest === 'clipboard' ? {} : {}}
+              >
+                {exportDest === 'clipboard' ? 'copy' : 'download'}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
+import { ArrowUpTrayIcon } from '@heroicons/react/20/solid';
 
 const MAX_DIM = 2048;
 
@@ -83,28 +84,24 @@ export default function ImageUploader({ onImageLoad }) {
         onChange={handleChange}
         hidden
       />
+      <div className="uploader-border" />
       {error ? (
-        <div className="upload-placeholder">
-          <p>{error}</p>
-        </div>
+        <p className="uploader-error">{error}</p>
       ) : preview ? (
         <>
-          <img src={preview} alt="preview" className="preview" />
+          <img src={preview} alt="preview" className="uploader-preview" />
           {fileName && (
-            <span className="file-name">
-              {fileName.length > 20 ? fileName.slice(0, 17) + '...' : fileName}
-            </span>
+            <span className="uploader-name">{fileName.length > 24 ? fileName.slice(0, 21) + '...' : fileName}</span>
           )}
         </>
       ) : (
-        <div className="upload-placeholder">
-          <p>drop</p>
-          <p>/ paste</p>
-          <p>/ click</p>
-        </div>
+        <>
+          <ArrowUpTrayIcon className="uploader-icon" />
+          <span className="uploader-hint">drop / paste / click</span>
+        </>
       )}
       {!preview && !error && (
-        <p className="upload-hint">
+        <p className="uploader-description">
           best results with high contrast images — black &amp; white, monochrome, bold two-tone colors, or svg
         </p>
       )}

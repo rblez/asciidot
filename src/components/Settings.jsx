@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const STYLES = [
   { key: 'basic', label: 'Basic', desc: 'hard threshold' },
@@ -9,7 +10,6 @@ const STYLES = [
 
 export default function Settings({ settings, onChange, onAutoThreshold }) {
   const [modalOpen, setModalOpen] = useState(false);
-  const modalRef = useRef(null);
 
   const handleChange = (key, value) => {
     onChange({ ...settings, [key]: value });
@@ -36,84 +36,86 @@ export default function Settings({ settings, onChange, onAutoThreshold }) {
 
   return (
     <>
-      <div className="settings">
-        <div className="setting-group">
-          <label htmlFor="precision">Precision</label>
-          <input
-            id="precision"
-            type="range"
-            min="0.05"
-            max="0.95"
-            step="0.05"
-            value={precision}
-            onChange={(e) => handleChange('precision', parseFloat(e.target.value))}
-          />
-          <span className="setting-value">{pxVal}px</span>
+      <div className="controls-strip">
+        <div className="control-group">
+          <span className="control-label">Precision</span>
+          <div className="slider-wrap">
+            <input
+              type="range"
+              min="0.05"
+              max="0.95"
+              step="0.05"
+              value={precision}
+              onChange={(e) => handleChange('precision', parseFloat(e.target.value))}
+            />
+            <span className="control-value">{pxVal}px</span>
+          </div>
           <button className="auto-btn" onClick={onAutoThreshold} title="auto threshold (Otsu)">auto</button>
         </div>
 
-        <div className="setting-group">
-          <label htmlFor="scale">Scale</label>
-          <input
-            id="scale"
-            type="range"
-            min="0.1"
-            max="1"
-            step="0.05"
-            value={settings.scale}
-            onChange={(e) => handleChange('scale', parseFloat(e.target.value))}
-          />
-          <span className="setting-value">{(settings.scale * 100).toFixed(0)}%</span>
-        </div>
-
-        <div className="setting-group toggle-group">
-          <label htmlFor="invert">Invert</label>
-          <label className="toggle">
+        <div className="control-group">
+          <span className="control-label">Scale</span>
+          <div className="slider-wrap">
             <input
-              id="invert"
-              type="checkbox"
-              checked={settings.invert}
-              onChange={(e) => handleChange('invert', e.target.checked)}
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value={settings.scale}
+              onChange={(e) => handleChange('scale', parseFloat(e.target.value))}
             />
-            <span className="toggle-slider"></span>
-          </label>
+            <span className="control-value">{(settings.scale * 100).toFixed(0)}%</span>
+          </div>
         </div>
 
-        <div className="setting-group toggle-group">
-          <label htmlFor="crop">Crop</label>
-          <label className="toggle">
+        <div className="control-group">
+          <div
+            className={`toggle${settings.invert ? ' active' : ''}`}
+            onClick={() => handleChange('invert', !settings.invert)}
+          >
+            <div className="toggle-track">
+              <div className="toggle-knob" />
+            </div>
+            Invert
+          </div>
+        </div>
+
+        <div className="control-group">
+          <div
+            className={`toggle${settings.crop ? ' active' : ''}`}
+            onClick={() => handleChange('crop', !settings.crop)}
+          >
+            <div className="toggle-track">
+              <div className="toggle-knob" />
+            </div>
+            Crop
+          </div>
+        </div>
+
+        <div className="control-group">
+          <span className="control-label">Size</span>
+          <div className="slider-wrap">
             <input
-              id="crop"
-              type="checkbox"
-              checked={settings.crop}
-              onChange={(e) => handleChange('crop', e.target.checked)}
+              type="range"
+              min="8"
+              max="24"
+              step="1"
+              value={settings.fontSize}
+              onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
             />
-            <span className="toggle-slider"></span>
-          </label>
+            <span className="control-value">{settings.fontSize}px</span>
+          </div>
         </div>
 
-        <div className="setting-group">
-          <label htmlFor="fontSize">Size</label>
-          <input
-            id="fontSize"
-            type="range"
-            min="8"
-            max="24"
-            step="1"
-            value={settings.fontSize}
-            onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
-          />
-          <span className="setting-value">{settings.fontSize}px</span>
-        </div>
-
-        <div className="setting-group">
-          <button className="style-trigger" onClick={() => setModalOpen(true)}>
-            styles · {currentLabel}
+        <div className="control-group">
+          <button className="styles-trigger-btn" onClick={() => setModalOpen(true)}>
+            styles
+            <ChevronDownIcon className={`chevron${modalOpen ? ' open' : ''}`} />
           </button>
         </div>
 
-        <div className="setting-group">
-          <span className="dimensions-label">
+        <div className="control-group">
+          <span className="control-label output-dims">
             {settings.dimensions
               ? `${settings.dimensions.cols}×${settings.dimensions.rows}`
               : '—×—'}
@@ -123,18 +125,23 @@ export default function Settings({ settings, onChange, onAutoThreshold }) {
 
       {modalOpen && (
         <div className="modal-backdrop" onClick={() => setModalOpen(false)}>
-          <div className="modal-box" ref={modalRef} onClick={(e) => e.stopPropagation()}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-title">select style</div>
-            {STYLES.map((s) => (
-              <div
-                key={s.key}
-                className={`modal-option${settings.style === s.key ? ' selected' : ''}`}
-                onClick={() => selectStyle(s.key)}
-              >
-                <span className="modal-option-name">{s.label}</span>
-                <span className="modal-option-desc">{s.desc}</span>
-              </div>
-            ))}
+            <div className="modal-options">
+              {STYLES.map((s) => (
+                <button
+                  key={s.key}
+                  className={`modal-option${settings.style === s.key ? ' selected' : ''}`}
+                  onClick={() => selectStyle(s.key)}
+                >
+                  <div className="modal-radio">
+                    {settings.style === s.key && <div className="modal-radio-inner" />}
+                  </div>
+                  <span>{s.label}</span>
+                  <span className="modal-option-label">{s.desc}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
