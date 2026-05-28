@@ -498,18 +498,6 @@
   color: #e000e0;
 }
 
-/* Dimensions readout in controls */
-.dimensions-label {
-  font-size: 0.65rem;
-  color: #444;
-  font-family: 'Geist Pixel', monospace;
-  letter-spacing: 0.02em;
-}
-
-.mobile-text {
-  display: none;
-}
-
 /* ── Auto threshold button ── */
 .auto-btn {
   font-family: 'Geist Pixel', monospace;
@@ -527,69 +515,19 @@
   color: #e000e0;
 }
 
-/* ── Adjust bar (contrast/brightness) ── */
-.adjust-bar {
-  border-bottom: 1px solid #222;
-  background: #1a1a1a;
-}
-.adjust-toggle {
-  font-family: 'Geist Pixel', monospace;
-  font-size: 0.6rem;
+/* Dimensions readout in controls */
+.dimensions-label {
+  font-size: 0.65rem;
   color: #444;
-  background: none;
-  border: none;
-  padding: 4px 24px;
-  cursor: pointer;
-  line-height: 1;
-  transition: color 0.15s;
+  font-family: 'Geist Pixel', monospace;
+  letter-spacing: 0.02em;
 }
-.adjust-toggle:hover {
-  color: #e000e0;
+
+.mobile-text {
+  display: none;
 }
-.adjust-controls {
-  display: flex;
-  gap: 24px;
-  padding: 4px 24px 8px;
-}
-.adjust-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.adjust-group label {
-  font-size: 0.6rem;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-.adjust-group input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100px;
-  height: 1px;
-  background: #222;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin: 0;
-}
-.adjust-group input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 8px;
-  height: 8px;
-  background: #e000e0;
-  cursor: pointer;
-  border: none;
-}
-.adjust-group input[type="range"]::-moz-range-thumb {
-  width: 8px;
-  height: 8px;
-  background: #e000e0;
-  cursor: pointer;
-  border: none;
-}
+
+/* ── Auto threshold button ── */
 
 /* ── History strip ── */
 .history-strip {
@@ -649,285 +587,24 @@
 }
 
 /* ── Copy flash ── */
-.copy-btn.flash {
-  border-color: #e000e0;
-  color: #e000e0;
-}
 
-/* ── Rotate overlay (mobile portrait) ── */
-.rotate-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: #1a1a1a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-.rotate-icon {
-  font-size: 48px;
-  color: #444;
-  animation: rotate-hint 2s ease-in-out infinite;
-}
-@keyframes rotate-hint {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(90deg); }
-}
-.rotate-text {
-  font-family: 'Geist Pixel', monospace;
-  font-size: 13px;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  user-select: none;
-}
-
-/* ── Sidebar (mobile landscape) ── */
-.sidebar {
-  display: none;
-}
-
-@media (pointer: coarse) and (orientation: landscape) {
+/* ── Small viewport / responsive wrapping ── */
+@media (max-width: 900px) {
   .settings {
-    display: none;
+    height: auto;
+    min-height: auto;
+    flex-wrap: wrap;
+    padding: 4px 12px;
+    gap: 2px 0;
   }
-
-  .app {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "adjust adjust"
-      "preview sidebar";
+  .setting-group {
+    height: 36px;
   }
-  .app-header {
-    display: none;
-  }
-  .adjust-bar {
-    grid-area: adjust;
-  }
-  .preview-area {
-    grid-area: preview;
-    flex: none;
-    min-width: 0;
-  }
-  .sidebar {
-    grid-area: sidebar;
-    display: flex;
-    flex-direction: column;
-    background: #1a1a1a;
-    border-left: 1px solid #2a2a2a;
-    overflow-y: auto;
-  }
-
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    border-bottom: 1px solid #222;
-  }
-  .sidebar-title {
-    font-family: 'Geist Pixel', monospace;
-    font-size: 11px;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    line-height: 1;
-  }
-  .sidebar-toggle {
-    font-family: 'Geist Pixel', monospace;
-    font-size: 14px;
-    color: #555;
-    background: none;
-    border: none;
-    cursor: pointer;
-    line-height: 1;
-    padding: 2px 6px;
-  }
-  .sidebar-toggle:hover {
-    color: #e000e0;
-  }
-
-  .sidebar-controls {
-    flex: 1;
-    overflow-y: auto;
-    padding: 4px 0;
-  }
-
-  .sidebar-section {
-    padding: 8px 14px;
-  }
-
-  .sidebar-divider {
-    height: 1px;
-    background: #222;
-    margin: 4px 14px;
-  }
-
-  .sidebar-row {
-    margin-bottom: 10px;
-  }
-  .sidebar-row:last-child {
-    margin-bottom: 0;
-  }
-
-  .sidebar-label {
-    display: block;
-    font-family: 'Geist Pixel', monospace;
-    font-size: 10px;
-    color: #444;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-  }
-
-  .sidebar-slider-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .sidebar-slider-row input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    flex: 1;
-    height: 1px;
-    background: #222;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    margin: 0;
-  }
-  .sidebar-slider-row input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    background: #e000e0;
-    cursor: pointer;
-    border: none;
-  }
-  .sidebar-slider-row input[type="range"]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    background: #e000e0;
-    cursor: pointer;
-    border: none;
-  }
-  .sidebar-value {
-    font-family: 'Geist Pixel', monospace;
-    font-size: 10px;
-    color: #fff;
-    min-width: 30px;
-    text-align: right;
-  }
-  .sidebar-slider-row .auto-btn {
-    font-size: 9px;
-    padding: 2px 6px;
-    font-family: 'Geist Pixel', monospace;
-    color: #444;
-    background: none;
-    border: 1px solid #2a2a2a;
-    cursor: pointer;
-    line-height: 1.4;
-    flex-shrink: 0;
-  }
-  .sidebar-slider-row .auto-btn:hover {
-    border-color: #e000e0;
-    color: #e000e0;
-  }
-
-  .sidebar-toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .sidebar-toggle-row:last-child {
-    margin-bottom: 0;
-  }
-
-  .sidebar-style-btn {
-    width: 100%;
-    font-family: 'Geist Pixel', monospace;
-    font-size: 11px;
-    color: #555;
-    background: none;
-    border: 1px solid #2a2a2a;
-    padding: 7px 0;
-    cursor: pointer;
-    line-height: 1;
-    text-align: center;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .sidebar-style-btn:hover {
-    border-color: #e000e0;
-    color: #e000e0;
-  }
-
-  .sidebar-actions {
-    display: flex;
-    gap: 6px;
-  }
-  .sidebar-action-btn {
-    flex: 1;
-    font-family: 'Geist Pixel', monospace;
-    font-size: 10px;
-    color: #555;
-    background: none;
-    border: 1px solid #2a2a2a;
-    padding: 7px 0;
-    cursor: pointer;
-    line-height: 1;
-    text-align: center;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .sidebar-action-btn:hover {
-    border-color: #e000e0;
-    color: #e000e0;
-  }
-
-  .sidebar-dims {
-    padding: 8px 14px;
-    font-family: 'Geist Pixel', monospace;
-    font-size: 10px;
-    color: #333;
-    text-align: center;
-    border-top: 1px solid #222;
-  }
-
-  /* Hide desktop output toolbar save png on mobile */
-  .output-toolbar .save-png-btn {
-    display: none;
-  }
-
-  /* Mobile landscape: adjust bar */
-  .adjust-toggle {
-    padding: 4px 14px;
-    font-size: 0.55rem;
-  }
-  .adjust-controls {
-    display: flex;
-    gap: 16px;
-    padding: 4px 14px 8px;
-  }
-  .adjust-group input[type="range"] {
-    width: 80px;
-  }
-
-  /* Mobile landscape: history strip */
-  .history-strip {
-    height: 30px;
-    padding: 2px 4px;
-  }
-  .history-thumb {
-    height: 24px;
+  .setting-group + .setting-group::before {
+    margin: 0 10px;
   }
 }
 
-/* ── Small viewport adjustments ── */
 @media (max-width: 768px) {
   .app-header {
     padding-left: 16px;
@@ -954,18 +631,5 @@
   .upload-hint {
     white-space: normal;
     padding: 0 16px;
-  }
-
-  .adjust-toggle {
-    padding: 4px 16px;
-    font-size: 0.55rem;
-  }
-  .adjust-controls {
-    flex-direction: column;
-    gap: 6px;
-    padding: 4px 16px 8px;
-  }
-  .adjust-group input[type="range"] {
-    width: 80px;
   }
 }

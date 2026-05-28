@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import ImageUploader from './components/ImageUploader'
 import AsciiPreview from './components/AsciiPreview'
 import Settings from './components/Settings'
-import { imageToAscii, calculateBrailleGrid, applyContrastBrightness, cropWhitespace, otsuThreshold } from './utils/imageToAscii'
+import { imageToAscii, calculateBrailleGrid, cropWhitespace, otsuThreshold } from './utils/imageToAscii'
 import './App.css'
 
 const DEFAULT_SETTINGS = {
@@ -12,8 +12,6 @@ const DEFAULT_SETTINGS = {
   invert: false,
   fontSize: 14,
   crop: false,
-  contrast: 0,
-  brightness: 0,
 }
 
 function App() {
@@ -39,10 +37,6 @@ function App() {
     ctx.imageSmoothingEnabled = false
     ctx.drawImage(img, 0, 0, grid.srcW, grid.srcH)
     const imageData = ctx.getImageData(0, 0, grid.srcW, grid.srcH)
-
-    if (currentSettings.contrast !== 0 || currentSettings.brightness !== 0) {
-      applyContrastBrightness(imageData.data, grid.srcW, grid.srcH, currentSettings.contrast, currentSettings.brightness)
-    }
 
     let result = imageToAscii(imageData, currentSettings)
 
@@ -87,9 +81,6 @@ function App() {
     ctx.imageSmoothingEnabled = false
     ctx.drawImage(image, 0, 0, grid.srcW, grid.srcH)
     const imageData = ctx.getImageData(0, 0, grid.srcW, grid.srcH)
-    if (settings.contrast !== 0 || settings.brightness !== 0) {
-      applyContrastBrightness(imageData.data, grid.srcW, grid.srcH, settings.contrast, settings.brightness)
-    }
     const { width, height, data } = imageData
     const gray = new Uint8Array(width * height)
     for (let i = 0; i < width * height; i++) {
@@ -161,43 +152,6 @@ function App() {
         <h1>asciidot</h1>
         <span className="subtitle">dot art converter</span>
       </header>
-
-      <div className="adjust-bar">
-        <button
-          className="adjust-toggle"
-          onClick={() => setSettings(s => ({ ...s, adjustOpen: !s.adjustOpen }))}
-        >
-          {settings.adjustOpen ? '▾ adjust' : '▸ adjust'}
-        </button>
-        {settings.adjustOpen && (
-          <div className="adjust-controls">
-            <div className="adjust-group">
-              <label htmlFor="contrast">Contrast</label>
-              <input
-                id="contrast"
-                type="range"
-                min="-100"
-                max="100"
-                value={settings.contrast}
-                onChange={(e) => handleSettingsChange({ ...settings, contrast: parseInt(e.target.value) })}
-              />
-              <span className="setting-value">{settings.contrast > 0 ? '+' : ''}{settings.contrast}</span>
-            </div>
-            <div className="adjust-group">
-              <label htmlFor="brightness">Brightness</label>
-              <input
-                id="brightness"
-                type="range"
-                min="-100"
-                max="100"
-                value={settings.brightness}
-                onChange={(e) => handleSettingsChange({ ...settings, brightness: parseInt(e.target.value) })}
-              />
-              <span className="setting-value">{settings.brightness > 0 ? '+' : ''}{settings.brightness}</span>
-            </div>
-          </div>
-        )}
-      </div>
 
       <div className="preview-area">
         <div className="box">
