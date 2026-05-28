@@ -48,8 +48,9 @@ function App() {
   const [history, setHistory] = useState([])
   const [copiedStyle, setCopiedStyle] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [isDesktop, setIsDesktop] = useState(true)
-  const copyTimer = useRef(null)
+  const [isDesktop, setIsDesktop] = useState(() =>
+    window.matchMedia('(pointer: fine)').matches
+  )
 
   useEffect(() => {
     const mq = window.matchMedia('(pointer: fine)')
